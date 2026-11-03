@@ -31,5 +31,12 @@ export function createApp(config: RigConfig = loadConfig()) {
     );
   });
 
+  // Same readNight as the page: one source, one sort (ADR 0001). Rows pass through untouched.
+  app.get('/api/digest/:night', (c) => {
+    const log = readNight(config.runsDir, c.req.param('night'));
+    if (!log) return c.json({ error: 'no such night' }, 404);
+    return c.json(log);
+  });
+
   return app;
 }
